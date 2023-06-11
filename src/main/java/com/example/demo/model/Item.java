@@ -3,6 +3,8 @@ package com.example.demo.model;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.example.demo.constant.ItemKind;
+
 public class Item {
 	
 	private Integer itemNo;
@@ -14,6 +16,7 @@ public class Item {
 	private Date launchedTime;
 	private BigDecimal warrantyDate;
 	private String itemProdDescription;
+	private ItemKind itemKind;//Enum類型
 	
 	public Integer getItemNo() {
 		return itemNo;
@@ -69,7 +72,10 @@ public class Item {
 	public void setItemProdDescription(String itemProdDescription) {
 		this.itemProdDescription = itemProdDescription;
 	}
-	
-	
-	
+	public ItemKind getItemKind() {
+		return itemKind;
+	}
+	public void setItemKind(ItemKind itemKind) {
+		this.itemKind = itemKind;
+	}
 }
