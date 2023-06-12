@@ -42,7 +42,7 @@ public class ItemController {
 		
 		Item item = itemService.getItemById(itemNo);
 		
-		return ResponseEntity.status(HttpStatus.CREATED).body(item);
+		return ResponseEntity.status(HttpStatus.CREATED).body(item);//201
 	}
 	
 	@PutMapping("/item/{itemNo}")
@@ -61,11 +61,14 @@ public class ItemController {
 		return ResponseEntity.status(HttpStatus.OK).body(updatedItem);
 	}
 	
-//	@DeleteMapping("item/{itemNo}")
-//	public ResponseEntity<Item> deleteItem(@PathVariable Integer itemNo){
-//		
-//		
-//		
-//	}
+	@DeleteMapping("item/{itemNo}")
+	public ResponseEntity<?> deleteItemById(@PathVariable Integer itemNo){
+
+		itemService.deleteItemById(itemNo);
+		
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();//204
+		
+		
+	}
 	
 }

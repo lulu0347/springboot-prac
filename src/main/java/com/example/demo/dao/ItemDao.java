@@ -10,4 +10,6 @@ public interface ItemDao {
 	Integer createItem(ItemRequest itemRequest);
 	
 	void updateItem(ItemRequest itemRequest, Integer itemNo);
+	
+	void deleteItemById(Integer itemNo);
 }

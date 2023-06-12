@@ -28,5 +28,10 @@ public class ItemServiceImpl implements ItemService{
 	public void updateItem(ItemRequest itemRequest, Integer itemNo) {
 		itemDao.updateItem(itemRequest, itemNo);
 	}
-	
+
+	@Override
+	public void deleteItemById(Integer itemNo) {
+		itemDao.deleteItemById(itemNo);
+		
+	}
 }

@@ -49,6 +49,7 @@ public class ItemDaoImpl implements ItemDao{
 
 	@Override
 	public Integer createItem(ItemRequest itemRequest) {
+		
 		final String sql = "INSERT INTO item(kindNo,itemName,itemPrice,itemState, "
 				+ "warrantyDate,soldTime,launchedTime,itemProdDescription) "
 				+ "Values(:kindNo, :itemName, :itemPrice, :itemState, :warrantyDate, :soldTime, :launchedTime, "
@@ -75,11 +76,11 @@ public class ItemDaoImpl implements ItemDao{
 		int itemNo = keyHolder.getKey().intValue();
 		
 		return itemNo;
-		
 	}
 
 	@Override
 	public void updateItem(ItemRequest itemRequest, Integer itemNo) {
+		
 		final String sql = "UPDATE Item SET kindNo = :kindNo, itemName = :itemName, itemPrice = :itemPrice, itemState = :itemState, warrantyDate = :warrantyDate, "
 				+ "itemProdDescription = :itemProdDescription, launchedTime =:launchedTime, soldTime = :soldTime "
 				+ "WHERE itemNo = :itemNo";
@@ -100,6 +101,15 @@ public class ItemDaoImpl implements ItemDao{
 		
 		namedParameterJdbcTemplate.update(sql, map);
 	}
-	
-	
+
+	@Override
+	public void deleteItemById(Integer itemNo) {
+		
+		final String sql = " DELETE FROM Item WHERE itemNo = :itemNo ";
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("itemNo", itemNo);
+		
+		namedParameterJdbcTemplate.update(sql, map);
+	}
 }
