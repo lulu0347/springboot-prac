@@ -1,5 +1,7 @@
 package com.example.demo.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,11 @@ public class ItemServiceImpl implements ItemService{
 	@Autowired
 	private ItemDao itemDao;
 	
+	@Override
+	public List<Item> getItems() {
+		return itemDao.getItems();
+	}
+
 	@Override
 	public Item getItemById(Integer itemId) {
 		return itemDao.getItemById(itemId);

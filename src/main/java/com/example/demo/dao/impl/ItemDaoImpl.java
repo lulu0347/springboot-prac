@@ -25,6 +25,24 @@ public class ItemDaoImpl implements ItemDao{
 	
 	
 	@Override
+	public List<Item> getItems() {
+		
+		final String sql = 
+				"select itemNo, kindNo, "
+				+ "itemName, itemprice, "
+				+ "itemstate, soldtime, "
+				+ "launchedtime, warrantydate, "
+				+ "itemproddescription "
+				+ "From Item ";
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		List<Item> list = namedParameterJdbcTemplate.query(sql, map, new ItemRowMapper());
+		
+		return list;
+	}
+
+	@Override
 	public Item getItemById(Integer itemNo) {
 
 		final String sql = 

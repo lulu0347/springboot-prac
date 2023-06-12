@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,14 @@ public class ItemController {
 
 	@Autowired
 	private ItemService itemService;
+	
+	@GetMapping("/items")
+	public ResponseEntity<List<Item>> getAllItem(){
+		
+		List<Item> itemList = itemService.getItems();
+		
+		return ResponseEntity.status(HttpStatus.OK).body(itemList);
+	}
 	
 	@GetMapping("/item/{itemId}")
 	public ResponseEntity<Item> getItem(@PathVariable Integer itemId){
@@ -51,14 +61,14 @@ public class ItemController {
 		Item item = itemService.getItemById(itemNo);
 		
 		if(item == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();//404
 		}
 		
 		itemService.updateItem(itemRequest, itemNo);
 		
 		Item updatedItem = itemService.getItemById(itemNo);
 		
-		return ResponseEntity.status(HttpStatus.OK).body(updatedItem);
+		return ResponseEntity.status(HttpStatus.OK).body(updatedItem);//200
 	}
 	
 	@DeleteMapping("item/{itemNo}")
@@ -67,8 +77,5 @@ public class ItemController {
 		itemService.deleteItemById(itemNo);
 		
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();//204
-		
-		
 	}
-	
 }
