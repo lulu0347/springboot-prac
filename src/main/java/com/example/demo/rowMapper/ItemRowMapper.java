@@ -1,4 +1,4 @@
-package rowMapper;
+package com.example.demo.rowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

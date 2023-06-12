@@ -9,7 +9,6 @@ import com.example.demo.constant.ItemKind;
 public class ItemRequest {
 
 	//接JSON格式的數據
-	
 	@NotNull
 	private Integer kindNo;
 	

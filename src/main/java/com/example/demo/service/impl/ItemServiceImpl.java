@@ -23,6 +23,10 @@ public class ItemServiceImpl implements ItemService{
 	public Integer createItem(ItemRequest itemRequest) {
 		return itemDao.createItem(itemRequest);
 	}
-	
+
+	@Override
+	public void updateItem(ItemRequest itemRequest, Integer itemNo) {
+		itemDao.updateItem(itemRequest, itemNo);
+	}
 	
 }

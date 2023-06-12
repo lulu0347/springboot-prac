@@ -8,4 +8,6 @@ public interface ItemDao {
 	Item getItemById(Integer itemId);
 	
 	Integer createItem(ItemRequest itemRequest);
+	
+	void updateItem(ItemRequest itemRequest, Integer itemNo);
 }

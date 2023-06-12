@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component;
 import com.example.demo.dao.ItemDao;
 import com.example.demo.dto.ItemRequest;
 import com.example.demo.model.Item;
-
-import rowMapper.ItemRowMapper;
+import com.example.demo.rowMapper.ItemRowMapper;
 
 @Component
 public class ItemDaoImpl implements ItemDao{
@@ -77,6 +76,29 @@ public class ItemDaoImpl implements ItemDao{
 		
 		return itemNo;
 		
+	}
+
+	@Override
+	public void updateItem(ItemRequest itemRequest, Integer itemNo) {
+		final String sql = "UPDATE Item SET kindNo = :kindNo, itemName = :itemName, itemPrice = :itemPrice, itemState = :itemState, warrantyDate = :warrantyDate, "
+				+ "itemProdDescription = :itemProdDescription, launchedTime =:launchedTime, soldTime = :soldTime "
+				+ "WHERE itemNo = :itemNo";
+		
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("itemNo", itemNo);
+		
+		map.put("kindNo", itemRequest.getKindNo());
+		map.put("itemName", itemRequest.getItemName());
+		map.put("itemPrice", itemRequest.getItemPrice());
+		map.put("itemState", itemRequest.getItemState());
+		map.put("warrantyDate", itemRequest.getWarrantyDate());
+		//切忌大小寫問題 2023-06-11 
+		map.put("itemProdDescription", itemRequest.getItemProdDescription().toString());
+		
+		map.put("launchedTime", new Date());//註 : 這邊暫且先做強制更新
+		map.put("soldTime", new Date());//註 : 這邊暫且先做強制更新
+		
+		namedParameterJdbcTemplate.update(sql, map);
 	}
 	
 	
