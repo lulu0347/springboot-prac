@@ -2,12 +2,13 @@ package com.example.demo.service;
 
 import java.util.List;
 
+import com.example.demo.constant.ItemKind;
 import com.example.demo.dto.ItemRequest;
 import com.example.demo.model.Item;
 
 public interface ItemService {
 
-	List<Item> getItems();//取得所有商品
+	List<Item> getItems(ItemKind itemKind, String search_keyWord);//取得所有商品
 	
 	Item getItemById(Integer itemId);
 	

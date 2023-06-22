@@ -11,7 +11,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
+import com.example.demo.constant.ItemKind;
 import com.example.demo.dao.ItemDao;
 import com.example.demo.dto.ItemRequest;
 import com.example.demo.model.Item;
@@ -25,17 +27,51 @@ public class ItemDaoImpl implements ItemDao{
 	
 	
 	@Override
-	public List<Item> getItems() {
+	public List<Item> getItems(ItemKind itemKind, String search_keyWord) {
 		
-		final String sql = 
-				"select itemNo, kindNo, "
+		String sql = 
+				"SELECT itemNo, kindNo, "
 				+ "itemName, itemprice, "
 				+ "itemstate, soldtime, "
 				+ "launchedtime, warrantydate, "
 				+ "itemproddescription "
-				+ "From Item ";
+				+ "FROM Item "
+				+ "WHERE 1=1";
 		
+		String kind = "";
+		
+		//將enum的英文轉為數字 符合item資料表內KindNo欄位數值
+		if(itemKind != null) {
+			switch (itemKind.name()) {
+		    case "CELLPHONE":
+		    	kind = "1";
+		        break;
+		    case "COMPUTER":
+		    	kind = "2";
+		        break;
+		    case "WATCH":
+		    	kind = "3";
+		        break;
+		    case "CAMERA":
+		    	kind = "4";
+		        break;
+		    case "FITTING":
+		    	kind = "5";
+		        break;
+			}
+		}
+
 		Map<String,Object> map = new HashMap<String,Object>();
+
+		if(kind != null && kind.trim().length() != 0) {
+			sql = sql + " AND kindNo = :kindNo ";
+			map.put("kindNo", kind);
+		}
+		
+		if(search_keyWord != null && search_keyWord.trim().length() !=0) {
+			sql = sql + " AND itemName LIKE :search_keyWord ";
+			map.put("search_keyWord", "%"+ search_keyWord +"%");
+		}
 		
 		List<Item> list = namedParameterJdbcTemplate.query(sql, map, new ItemRowMapper());
 		

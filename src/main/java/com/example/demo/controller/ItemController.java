@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.constant.ItemKind;
 import com.example.demo.dto.ItemRequest;
 import com.example.demo.model.Item;
 import com.example.demo.service.ItemService;
@@ -25,10 +27,14 @@ public class ItemController {
 	@Autowired
 	private ItemService itemService;
 	
-	@GetMapping("/items")
-	public ResponseEntity<List<Item>> getAllItem(){
+	@GetMapping("/items")//查看分類商品
+	//產品分類不一定要加 required = false;
+	public ResponseEntity<List<Item>> getAllItem(
+			@RequestParam(required = false) ItemKind itemKind,
+			@RequestParam(required = false) String search_keyWord
+	){
 		
-		List<Item> itemList = itemService.getItems();
+		List<Item> itemList = itemService.getItems(itemKind, search_keyWord);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(itemList);
 	}
