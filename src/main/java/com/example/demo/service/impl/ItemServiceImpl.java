@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.constant.ItemKind;
 import com.example.demo.dao.ItemDao;
+import com.example.demo.dto.ItemQueryParameters;
 import com.example.demo.dto.ItemRequest;
 import com.example.demo.model.Item;
 import com.example.demo.service.ItemService;
@@ -18,8 +18,8 @@ public class ItemServiceImpl implements ItemService{
 	private ItemDao itemDao;
 	
 	@Override
-	public List<Item> getItems(ItemKind itemKind, String search_keyWord) {
-		return itemDao.getItems(itemKind,search_keyWord);
+	public List<Item> getItems(ItemQueryParameters itemQueryParameters) {
+		return itemDao.getItems(itemQueryParameters);
 	}
 
 	@Override

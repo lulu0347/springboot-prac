@@ -20,6 +20,7 @@ import com.example.demo.constant.ItemKind;
 import com.example.demo.dto.ItemRequest;
 import com.example.demo.model.Item;
 import com.example.demo.service.ItemService;
+import com.example.demo.dto.ItemQueryParameters;
 
 @RestController
 public class ItemController {
@@ -34,7 +35,12 @@ public class ItemController {
 			@RequestParam(required = false) String search_keyWord
 	){
 		
-		List<Item> itemList = itemService.getItems(itemKind, search_keyWord);
+		//將前端的值傳入此DTO，統一整理
+		ItemQueryParameters itemQueryParameters = new ItemQueryParameters();
+		itemQueryParameters.setItemKind(itemKind);
+		itemQueryParameters.setSearch_keyWord(search_keyWord);
+		
+		List<Item> itemList = itemService.getItems(itemQueryParameters);
 		
 		return ResponseEntity.status(HttpStatus.OK).body(itemList);
 	}

@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 
 import com.example.demo.constant.ItemKind;
 import com.example.demo.dao.ItemDao;
+import com.example.demo.dto.ItemQueryParameters;
 import com.example.demo.dto.ItemRequest;
 import com.example.demo.model.Item;
 import com.example.demo.rowMapper.ItemRowMapper;
@@ -27,7 +28,7 @@ public class ItemDaoImpl implements ItemDao{
 	
 	
 	@Override
-	public List<Item> getItems(ItemKind itemKind, String search_keyWord) {
+	public List<Item> getItems(ItemQueryParameters itemQueryParameters) {
 		
 		String sql = 
 				"SELECT itemNo, kindNo, "
@@ -41,8 +42,8 @@ public class ItemDaoImpl implements ItemDao{
 		String kind = "";
 		
 		//將enum的英文轉為數字 符合item資料表內KindNo欄位數值
-		if(itemKind != null) {
-			switch (itemKind.name()) {
+		if(itemQueryParameters.getItemKind() != null) {
+			switch (itemQueryParameters.getItemKind().name()) {
 		    case "CELLPHONE":
 		    	kind = "1";
 		        break;
@@ -68,9 +69,9 @@ public class ItemDaoImpl implements ItemDao{
 			map.put("kindNo", kind);
 		}
 		
-		if(search_keyWord != null && search_keyWord.trim().length() !=0) {
+		if(itemQueryParameters.getSearch_keyWord() != null && itemQueryParameters.getSearch_keyWord().trim().length() !=0) {
 			sql = sql + " AND itemName LIKE :search_keyWord ";
-			map.put("search_keyWord", "%"+ search_keyWord +"%");
+			map.put("search_keyWord", "%"+ itemQueryParameters.getSearch_keyWord() +"%");
 		}
 		
 		List<Item> list = namedParameterJdbcTemplate.query(sql, map, new ItemRowMapper());
