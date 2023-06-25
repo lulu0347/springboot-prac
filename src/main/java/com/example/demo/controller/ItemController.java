@@ -3,10 +3,13 @@ package com.example.demo.controller;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +25,7 @@ import com.example.demo.model.Item;
 import com.example.demo.service.ItemService;
 import com.example.demo.dto.ItemQueryParameters;
 
+@Validated //有用到Min跟Max
 @RestController
 public class ItemController {
 
@@ -37,7 +41,11 @@ public class ItemController {
 			
 			// 排序條件
 			@RequestParam(defaultValue = "launchedTime") String orderBy,
-			@RequestParam(defaultValue = "desc") String sort
+			@RequestParam(defaultValue = "desc") String sort,
+			
+			//分頁
+			@RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit, //最多幾筆
+			@RequestParam(defaultValue = "0") @Min(0) Integer offset //跳過幾筆
 	){
 		
 		//將前端的值傳入此DTO，統一整理
@@ -46,6 +54,8 @@ public class ItemController {
 		itemQueryParameters.setSearch_keyWord(search_keyWord);
 		itemQueryParameters.setOrderBy(orderBy);
 		itemQueryParameters.setSort(sort);
+		itemQueryParameters.setLimit(limit);
+		itemQueryParameters.setOffset(offset);
 		
 		List<Item> itemList = itemService.getItems(itemQueryParameters);
 		
