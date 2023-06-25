@@ -23,6 +23,7 @@ import com.example.demo.constant.ItemKind;
 import com.example.demo.dto.ItemRequest;
 import com.example.demo.model.Item;
 import com.example.demo.service.ItemService;
+import com.example.demo.util.Page;
 import com.example.demo.dto.ItemQueryParameters;
 
 @Validated //有用到Min跟Max
@@ -31,6 +32,45 @@ public class ItemController {
 
 	@Autowired
 	private ItemService itemService;
+
+	@GetMapping("/itemsPage")//查看分類商品(分頁版本)
+	//產品分類不一定要加 required = false;
+	public ResponseEntity<Page<Item>> getAllItemPage(
+			// 查詢條件
+			@RequestParam(required = false) ItemKind itemKind,
+			@RequestParam(required = false) String search_keyWord,
+			
+			// 排序條件
+			@RequestParam(defaultValue = "launchedTime") String orderBy,
+			@RequestParam(defaultValue = "desc") String sort,
+			
+			//分頁
+			@RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit, //最多幾筆
+			@RequestParam(defaultValue = "0") @Min(0) Integer offset //跳過幾筆
+	){
+		
+		//將前端的值傳入此DTO，統一整理
+		ItemQueryParameters itemQueryParameters = new ItemQueryParameters();
+		itemQueryParameters.setItemKind(itemKind);
+		itemQueryParameters.setSearch_keyWord(search_keyWord);
+		itemQueryParameters.setOrderBy(orderBy);
+		itemQueryParameters.setSort(sort);
+		itemQueryParameters.setLimit(limit);
+		itemQueryParameters.setOffset(offset);
+		
+		List<Item> itemList = itemService.getItems(itemQueryParameters);
+		
+		// 取得商品總筆數
+		Integer total = itemService.countItem(itemQueryParameters);
+		
+		Page<Item> page = new Page<>();
+		page.setLimit(limit);
+		page.setOffset(offset);
+		page.setTotal(total);
+		page.setResults(itemList);
+		
+		return ResponseEntity.status(HttpStatus.OK).body(page);
+	}
 	
 	@GetMapping("/items")//查看分類商品
 	//產品分類不一定要加 required = false;

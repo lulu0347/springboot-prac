@@ -26,6 +26,7 @@ public class ItemDaoImpl implements ItemDao{
 	
 	
 	@Override
+	// 與分頁版共用方法
 	public List<Item> getItems(ItemQueryParameters itemQueryParameters) {
 		
 		String sql = 
@@ -39,25 +40,8 @@ public class ItemDaoImpl implements ItemDao{
 		
 		String kind = "";
 		
-		//將enum的英文轉為數字 符合item資料表內KindNo欄位數值
 		if(itemQueryParameters.getItemKind() != null) {
-			switch (itemQueryParameters.getItemKind().name()) {
-		    case "CELLPHONE":
-		    	kind = "1";
-		        break;
-		    case "COMPUTER":
-		    	kind = "2";
-		        break;
-		    case "WATCH":
-		    	kind = "3";
-		        break;
-		    case "CAMERA":
-		    	kind = "4";
-		        break;
-		    case "FITTING":
-		    	kind = "5";
-		        break;
-			}
+			kind = transferKind(itemQueryParameters.getItemKind().name());
 		}
 
 		Map<String,Object> map = new HashMap<String,Object>();
@@ -175,5 +159,64 @@ public class ItemDaoImpl implements ItemDao{
 		map.put("itemNo", itemNo);
 		
 		namedParameterJdbcTemplate.update(sql, map);
+	}
+
+	@Override
+	public Integer countItem(ItemQueryParameters itemQueryParameters) {
+
+		String sql = " SELECT COUNT(*) FROM item WHERE 1=1 ";
+		
+		String kind = "";
+		
+		if(itemQueryParameters.getItemKind() != null) {
+			kind = transferKind(itemQueryParameters.getItemKind().name());
+		}
+
+		Map<String,Object> map = new HashMap<String,Object>();
+		
+		// 分類
+		if(kind != null && kind.trim().length() != 0) {
+			sql = sql + " AND kindNo = :kindNo ";
+			map.put("kindNo", kind);
+		}
+		
+		// 模糊查詢
+		if(itemQueryParameters.getSearch_keyWord() != null && itemQueryParameters.getSearch_keyWord().trim().length() !=0) {
+			sql = sql + " AND itemName LIKE :search_keyWord ";
+			map.put("search_keyWord", "%"+ itemQueryParameters.getSearch_keyWord() +"%");
+		}
+		
+		Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class); //第三個代表要將回傳值以Integer傳回
+		
+		return total;
+	}
+	
+	/**
+	 * 轉換itemKind
+	 * @param itenKind
+	 * @return
+	 */
+	private String transferKind(String itenKind) {
+		
+		String kind = "";
+		
+		switch (itenKind) {
+	    case "CELLPHONE":
+	    	kind = "1";
+	        break;
+	    case "COMPUTER":
+	    	kind = "2";
+	        break;
+	    case "WATCH":
+	    	kind = "3";
+	        break;
+	    case "CAMERA":
+	    	kind = "4";
+	        break;
+	    case "FITTING":
+	    	kind = "5";
+	        break;
+		}
+		return kind;
 	}
 }

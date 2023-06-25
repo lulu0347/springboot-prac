@@ -8,6 +8,7 @@ import com.example.demo.model.Item;
 
 public interface ItemDao {
 
+	// 與分頁版共用方法
 	List<Item> getItems(ItemQueryParameters itemQueryParameters);//取得所有商品
 	
 	Item getItemById(Integer itemId);
@@ -17,4 +18,6 @@ public interface ItemDao {
 	void updateItem(ItemRequest itemRequest, Integer itemNo);
 	
 	void deleteItemById(Integer itemNo);
+	
+	Integer countItem(ItemQueryParameters itemQueryParameters);
 }

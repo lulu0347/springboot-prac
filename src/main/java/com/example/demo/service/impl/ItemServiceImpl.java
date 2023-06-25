@@ -18,6 +18,7 @@ public class ItemServiceImpl implements ItemService{
 	private ItemDao itemDao;
 	
 	@Override
+	// 與分頁版共用方法
 	public List<Item> getItems(ItemQueryParameters itemQueryParameters) {
 		return itemDao.getItems(itemQueryParameters);
 	}
@@ -41,5 +42,10 @@ public class ItemServiceImpl implements ItemService{
 	public void deleteItemById(Integer itemNo) {
 		itemDao.deleteItemById(itemNo);
 		
+	}
+
+	@Override
+	public Integer countItem(ItemQueryParameters itemQueryParameters) {
+		return itemDao.countItem(itemQueryParameters);
 	}
 }

@@ -8,7 +8,8 @@ import com.example.demo.model.Item;
 
 public interface ItemService {
 
-	List<Item> getItems(ItemQueryParameters itemQueryParameters);//取得所有商品
+	// 與分頁版共用方法
+	List<Item> getItems(ItemQueryParameters itemQueryParameters); 
 	
 	Item getItemById(Integer itemId);
 	
@@ -17,5 +18,7 @@ public interface ItemService {
 	void updateItem(ItemRequest itemRequest, Integer itemNo);
 	
 	void deleteItemById(Integer itemNo);
+
+	Integer countItem(ItemQueryParameters itemQueryParameters);
 	
 }
