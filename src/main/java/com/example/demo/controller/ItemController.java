@@ -31,14 +31,21 @@ public class ItemController {
 	@GetMapping("/items")//查看分類商品
 	//產品分類不一定要加 required = false;
 	public ResponseEntity<List<Item>> getAllItem(
+			// 查詢條件
 			@RequestParam(required = false) ItemKind itemKind,
-			@RequestParam(required = false) String search_keyWord
+			@RequestParam(required = false) String search_keyWord,
+			
+			// 排序條件
+			@RequestParam(defaultValue = "launchedTime") String orderBy,
+			@RequestParam(defaultValue = "desc") String sort
 	){
 		
 		//將前端的值傳入此DTO，統一整理
 		ItemQueryParameters itemQueryParameters = new ItemQueryParameters();
 		itemQueryParameters.setItemKind(itemKind);
 		itemQueryParameters.setSearch_keyWord(search_keyWord);
+		itemQueryParameters.setOrderBy(orderBy);
+		itemQueryParameters.setSort(sort);
 		
 		List<Item> itemList = itemService.getItems(itemQueryParameters);
 		

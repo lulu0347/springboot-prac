@@ -11,9 +11,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-import com.example.demo.constant.ItemKind;
 import com.example.demo.dao.ItemDao;
 import com.example.demo.dto.ItemQueryParameters;
 import com.example.demo.dto.ItemRequest;
@@ -73,6 +71,8 @@ public class ItemDaoImpl implements ItemDao{
 			sql = sql + " AND itemName LIKE :search_keyWord ";
 			map.put("search_keyWord", "%"+ itemQueryParameters.getSearch_keyWord() +"%");
 		}
+		
+		sql = sql + " ORDER BY " + itemQueryParameters.getOrderBy() + " " + itemQueryParameters.getSort(); // 預設為 ORDER BY launchedTime desc
 		
 		List<Item> list = namedParameterJdbcTemplate.query(sql, map, new ItemRowMapper());
 		
