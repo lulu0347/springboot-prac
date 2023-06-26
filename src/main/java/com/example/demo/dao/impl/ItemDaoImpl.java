@@ -46,17 +46,7 @@ public class ItemDaoImpl implements ItemDao{
 
 		Map<String,Object> map = new HashMap<String,Object>();
 		
-		// 分類
-		if(kind != null && kind.trim().length() != 0) {
-			sql = sql + " AND kindNo = :kindNo ";
-			map.put("kindNo", kind);
-		}
-		
-		// 模糊查詢
-		if(itemQueryParameters.getSearch_keyWord() != null && itemQueryParameters.getSearch_keyWord().trim().length() !=0) {
-			sql = sql + " AND itemName LIKE :search_keyWord ";
-			map.put("search_keyWord", "%"+ itemQueryParameters.getSearch_keyWord() +"%");
-		}
+		sql = addFilterSql(sql, map, itemQueryParameters, kind);
 		
 		// 排序
 		sql = sql + " ORDER BY " + itemQueryParameters.getOrderBy() + " " + itemQueryParameters.getSort(); // 預設為 ORDER BY launchedTime desc
@@ -174,17 +164,7 @@ public class ItemDaoImpl implements ItemDao{
 
 		Map<String,Object> map = new HashMap<String,Object>();
 		
-		// 分類
-		if(kind != null && kind.trim().length() != 0) {
-			sql = sql + " AND kindNo = :kindNo ";
-			map.put("kindNo", kind);
-		}
-		
-		// 模糊查詢
-		if(itemQueryParameters.getSearch_keyWord() != null && itemQueryParameters.getSearch_keyWord().trim().length() !=0) {
-			sql = sql + " AND itemName LIKE :search_keyWord ";
-			map.put("search_keyWord", "%"+ itemQueryParameters.getSearch_keyWord() +"%");
-		}
+		sql = addFilterSql(sql, map, itemQueryParameters, kind);
 		
 		Integer total = namedParameterJdbcTemplate.queryForObject(sql, map, Integer.class); //第三個代表要將回傳值以Integer傳回
 		
@@ -218,5 +198,30 @@ public class ItemDaoImpl implements ItemDao{
 	        break;
 		}
 		return kind;
+	}
+	
+	/**
+	 * 依使用者輸入條件拼接sql Filter條件
+	 * @param sql
+	 * @param map
+	 * @param itemQueryParameters
+	 * @param kind
+	 * @return
+	 */
+	private String addFilterSql(String sql, Map<String,Object> map, ItemQueryParameters itemQueryParameters, String kind) {
+		
+		// 分類
+		if(kind != null && kind.trim().length() != 0) {
+			sql = sql + " AND kindNo = :kindNo ";
+			map.put("kindNo", kind);
+		}
+		
+		// 模糊查詢
+		if(itemQueryParameters.getSearch_keyWord() != null && itemQueryParameters.getSearch_keyWord().trim().length() !=0) {
+			sql = sql + " AND itemName LIKE :search_keyWord ";
+			map.put("search_keyWord", "%"+ itemQueryParameters.getSearch_keyWord() +"%");
+		}
+		
+		return sql;
 	}
 }

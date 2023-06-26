@@ -33,7 +33,7 @@ public class ItemController {
 	@Autowired
 	private ItemService itemService;
 
-	@GetMapping("/itemsPage")//查看分類商品(分頁版本)
+	@GetMapping("/itemsPage")//查看分類商品(各項Filter條件 + 分頁版本)
 	//產品分類不一定要加 required = false;
 	public ResponseEntity<Page<Item>> getAllItemPage(
 			// 查詢條件
@@ -77,25 +77,13 @@ public class ItemController {
 	public ResponseEntity<List<Item>> getAllItem(
 			// 查詢條件
 			@RequestParam(required = false) ItemKind itemKind,
-			@RequestParam(required = false) String search_keyWord,
-			
-			// 排序條件
-			@RequestParam(defaultValue = "launchedTime") String orderBy,
-			@RequestParam(defaultValue = "desc") String sort,
-			
-			//分頁
-			@RequestParam(defaultValue = "5") @Max(1000) @Min(0) Integer limit, //最多幾筆
-			@RequestParam(defaultValue = "0") @Min(0) Integer offset //跳過幾筆
+			@RequestParam(required = false) String search_keyWord
 	){
 		
 		//將前端的值傳入此DTO，統一整理
 		ItemQueryParameters itemQueryParameters = new ItemQueryParameters();
 		itemQueryParameters.setItemKind(itemKind);
 		itemQueryParameters.setSearch_keyWord(search_keyWord);
-		itemQueryParameters.setOrderBy(orderBy);
-		itemQueryParameters.setSort(sort);
-		itemQueryParameters.setLimit(limit);
-		itemQueryParameters.setOffset(offset);
 		
 		List<Item> itemList = itemService.getItems(itemQueryParameters);
 		
