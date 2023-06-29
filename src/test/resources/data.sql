@@ -1,0 +1,1 @@
+INSERT INTO item(kindNo,itemName,itemPrice,itemState,warrantyDate,soldTime,launchedTime,itemProdDescription) Values (1, "H2新增測試", 1000, 1, 1.0, "2023-06-30 00:00:01", "2023-06-30 00:00:00","隨意");
